@@ -46,20 +46,31 @@ Write-ColorOutput @"
 ╚══════════════════════════════════════════════════════════╝
 "@ "Yellow"
 
-# 경로 설정
-$RootPath = Split-Path -Parent $PSScriptRoot
+# 경로 설정 (스크립트가 루트 디렉토리에 있음)
+$RootPath = $PSScriptRoot
+if ([string]::IsNullOrEmpty($RootPath)) {
+    $RootPath = Get-Location
+}
+
+Write-ColorOutput "루트 경로: $RootPath" "Gray"
+
 $ProjectPath = Join-Path $RootPath "ClipboardPilot"
 $ProjectFile = Join-Path $ProjectPath "ClipboardPilot.csproj"
 $PublishPath = Join-Path $ProjectPath "bin\Release\net8.0-windows\win-x64\publish"
 $OutputPath = Join-Path $RootPath "Output"
 $SetupPath = Join-Path $RootPath "Setup"
-$SetupScript = Join-Path $SetupPath "ClipboardPilot.iss"
+
+Write-ColorOutput "프로젝트 경로: $ProjectPath" "Gray"
+Write-ColorOutput "출력 경로: $OutputPath" "Gray"
 
 # 경로 확인
 if (-not (Test-Path $ProjectFile)) {
     Write-Error "프로젝트 파일을 찾을 수 없습니다: $ProjectFile"
+    Write-ColorOutput "현재 디렉토리: $(Get-Location)" "Gray"
     exit 1
 }
+
+Write-Success "프로젝트 파일 확인: $ProjectFile"
 
 # Clean
 if ($Clean) {
@@ -82,8 +93,13 @@ if ($Clean) {
 }
 
 # 출력 폴더 생성
+Write-Step "출력 폴더 준비 중..."
 if (-not (Test-Path $OutputPath)) {
     New-Item -ItemType Directory -Path $OutputPath | Out-Null
+    Write-Success "Output 폴더 생성: $OutputPath"
+}
+else {
+    Write-Success "Output 폴더 확인: $OutputPath"
 }
 
 # 1. 빌드
@@ -132,6 +148,13 @@ if (-not $SkipBuild) {
         $FileSize = (Get-Item $ExePath).Length / 1MB
         Write-Success ("실행 파일 크기: {0:N2} MB" -f $FileSize)
     }
+    else {
+        Write-Error "실행 파일을 찾을 수 없습니다: $ExePath"
+        exit 1
+    }
+}
+else {
+    Write-ColorOutput "빌드 건너뜀 (SkipBuild 옵션)" "Yellow"
 }
 
 # 2. ZIP 파일 생성
@@ -152,12 +175,21 @@ if (Test-Path $TempZipDir) {
 New-Item -ItemType Directory -Path $TempZipDir | Out-Null
 
 # 파일 복사
-Copy-Item (Join-Path $PublishPath "ClipboardPilot.exe") $TempZipDir
+$ExePath = Join-Path $PublishPath "ClipboardPilot.exe"
+if (Test-Path $ExePath) {
+    Copy-Item $ExePath $TempZipDir
+    Write-ColorOutput "실행 파일 복사됨" "Gray"
+}
+else {
+    Write-Error "실행 파일을 찾을 수 없습니다: $ExePath"
+    exit 1
+}
+
 Copy-Item (Join-Path $RootPath "README.md") $TempZipDir -ErrorAction SilentlyContinue
 Copy-Item (Join-Path $RootPath "LICENSE.txt") $TempZipDir -ErrorAction SilentlyContinue
 Copy-Item (Join-Path $ProjectPath "clipboard-pilot.settings.json") $TempZipDir -ErrorAction SilentlyContinue
 
-# README 생성
+# 사용설명서 생성
 $ReadmeContent = @"
 클립보드 파일럿 v$Version
 ========================
@@ -190,7 +222,7 @@ $ReadmeContent = @"
 
 문의
 ----
-https://github.com/clipboardpilot/clipboardpilot
+https://github.com/BaeTab/ClipboardPilot
 "@
 
 Set-Content -Path (Join-Path $TempZipDir "사용설명서.txt") -Value $ReadmeContent -Encoding UTF8
@@ -200,7 +232,8 @@ Compress-Archive -Path "$TempZipDir\*" -DestinationPath $ZipPath -Force
 
 Remove-Item $TempZipDir -Recurse -Force
 
-Write-Success "ZIP 파일 생성: $ZipFileName"
+$ZipSize = (Get-Item $ZipPath).Length / 1MB
+Write-Success ("ZIP 파일 생성: $ZipFileName ({0:N2} MB)" -f $ZipSize)
 
 # 3. Inno Setup으로 설치 파일 생성
 if (-not $SkipSetup) {
@@ -234,8 +267,7 @@ if (-not $SkipSetup) {
         $SetupScripts = @(
             (Join-Path $SetupPath "ClipboardPilot-Simple.iss"),
             (Join-Path $SetupPath "ClipboardPilot-Full.iss"),
-            (Join-Path $SetupPath "ClipboardPilot-Minimal.iss"),
-            $SetupScript
+            (Join-Path $SetupPath "ClipboardPilot-Minimal.iss")
         )
         
         $FoundScript = $null
@@ -252,47 +284,29 @@ if (-not $SkipSetup) {
             Write-ColorOutput "  다음 위치에 스크립트를 생성하세요: $SetupPath" "Gray"
         }
         else {
-            # LICENSE 파일 생성 (없으면)
-            $LicensePath = Join-Path $RootPath "LICENSE.txt"
-            if (-not (Test-Path $LicensePath)) {
-                $LicenseContent = @"
-MIT License
-
-Copyright (c) 2024 Clipboard Pilot
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-"@
-                Set-Content -Path $LicensePath -Value $LicenseContent -Encoding UTF8
-            }
-            
             # Inno Setup 실행
             Write-ColorOutput "컴파일 중..." "Gray"
-            & $InnoSetupExe $FoundScript /Q
+            $InnoArgs = @(
+                $FoundScript
+                "/Q"
+                "/DMyAppVersion=$Version"
+            )
+            
+            & $InnoSetupExe $InnoArgs
             
             if ($LASTEXITCODE -eq 0) {
                 Write-Success "설치 파일 생성 완료"
                 
                 # 생성된 설치 파일 확인
-                $SetupFiles = Get-ChildItem $OutputPath -Filter "ClipboardPilot-Setup*.exe"
-                foreach ($file in $SetupFiles) {
-                    $FileSize = $file.Length / 1MB
-                    Write-ColorOutput ("  - {0} ({1:N2} MB)" -f $file.Name, $FileSize) "Gray"
+                $SetupFiles = Get-ChildItem $OutputPath -Filter "ClipboardPilot-Setup*.exe" -ErrorAction SilentlyContinue
+                if ($SetupFiles) {
+                    foreach ($file in $SetupFiles) {
+                        $FileSize = $file.Length / 1MB
+                        Write-ColorOutput ("  - {0} ({1:N2} MB)" -f $file.Name, $FileSize) "Gray"
+                    }
+                }
+                else {
+                    Write-ColorOutput "  설치 파일이 Output 폴더에 없습니다. Setup 폴더를 확인하세요." "Yellow"
                 }
             }
             else {
@@ -302,6 +316,9 @@ SOFTWARE.
         }
     }
 }
+else {
+    Write-ColorOutput "설치 파일 생성 건너뜀 (SkipSetup 옵션)" "Yellow"
+}
 
 # 4. 체크섬 생성
 Write-Step "체크섬 생성 중..."
@@ -309,16 +326,28 @@ Write-Step "체크섬 생성 중..."
 $ChecksumFile = Join-Path $OutputPath "checksums.txt"
 $ChecksumContent = @()
 
-$Files = Get-ChildItem $OutputPath -File
-foreach ($file in $Files) {
-    if ($file.Extension -ne ".txt") {
-        $Hash = Get-FileHash $file.FullName -Algorithm SHA256
-        $ChecksumContent += "$($Hash.Hash)  $($file.Name)"
+$Files = Get-ChildItem $OutputPath -File -ErrorAction SilentlyContinue
+if ($Files) {
+    foreach ($file in $Files) {
+        if ($file.Extension -ne ".txt") {
+            try {
+                $Hash = Get-FileHash $file.FullName -Algorithm SHA256
+                $ChecksumContent += "$($Hash.Hash)  $($file.Name)"
+            }
+            catch {
+                Write-ColorOutput "경고: $($file.Name) 체크섬 생성 실패" "Yellow"
+            }
+        }
+    }
+    
+    if ($ChecksumContent.Count -gt 0) {
+        $ChecksumContent | Set-Content -Path $ChecksumFile -Encoding UTF8
+        Write-Success "체크섬 파일 생성: checksums.txt"
     }
 }
-
-$ChecksumContent | Set-Content -Path $ChecksumFile -Encoding UTF8
-Write-Success "체크섬 파일 생성: checksums.txt"
+else {
+    Write-ColorOutput "⚠ Output 폴더에 파일이 없습니다." "Yellow"
+}
 
 # 완료
 Write-Step "완료!"
@@ -329,16 +358,22 @@ Write-ColorOutput @"
 -------------
 "@ "Green"
 
-Get-ChildItem $OutputPath -File | ForEach-Object {
-    $Size = $_.Length / 1MB
-    Write-ColorOutput ("  📦 {0,-40} ({1,8:N2} MB)" -f $_.Name, $Size) "White"
+$OutputFiles = Get-ChildItem $OutputPath -File -ErrorAction SilentlyContinue
+if ($OutputFiles) {
+    foreach ($file in $OutputFiles) {
+        $Size = $file.Length / 1MB
+        Write-ColorOutput ("  📦 {0,-40} ({1,8:N2} MB)" -f $file.Name, $Size) "White"
+    }
+}
+else {
+    Write-ColorOutput "  (파일 없음)" "Gray"
 }
 
 Write-ColorOutput @"
 
 다음 단계:
 ---------
-1. Output 폴더의 파일을 확인하세요.
+1. Output 폴더의 파일을 확인하세요: $OutputPath
 2. 설치 파일(*.exe)을 테스트하세요.
 3. GitHub Release에 업로드하세요.
 
@@ -348,6 +383,8 @@ Write-ColorOutput @"
 if ($Host.Name -eq "ConsoleHost") {
     $Response = Read-Host "출력 폴더를 여시겠습니까? (Y/N)"
     if ($Response -eq "Y" -or $Response -eq "y") {
-        Start-Process explorer.exe $OutputPath
+        if (Test-Path $OutputPath) {
+            Start-Process explorer.exe $OutputPath
+        }
     }
 }
