@@ -82,6 +82,10 @@
 - DevExpress 기반 모던 UI
 - 다크/라이트 테마 (시스템 설정 따름)
 - 사용자 정의 타이틀바
+  - 최소화, 최대화, 닫기 버튼
+  - Segoe MDL2 Assets 아이콘 사용
+  - 드래그로 창 이동
+  - 더블클릭으로 최대화/복원
 - 드래그 앤 드롭 지원
 - 반응형 레이아웃
 - 미니 패널 (빠른 접근)
@@ -93,6 +97,47 @@
 - 민감정보 필터링 옵션
 - 단축키 커스터마이징
 - 시작 프로그램 등록
+
+### 🐛 Fixed (수정)
+
+#### UI 버그 수정
+- 타이틀바 버튼이 표시되지 않던 문제 수정
+  - `WindowStyle`을 `None`으로 변경
+  - 버튼 아이콘을 Segoe MDL2 Assets 폰트로 변경
+  - 최대화/복원 버튼이 상태에 따라 아이콘 변경되도록 수정
+  - 타이틀바 더블클릭으로 최대화/복원 기능 추가
+
+#### 빌드 스크립트 수정
+- `Build-Release.ps1` 경로 설정 오류 수정
+  - `$RootPath` 계산 로직 수정
+  - Output 폴더 자동 생성 기능 추가
+  - 경로 확인 로직 추가
+- `Build-Simple.ps1` 경로 설정 오류 수정
+  - 동일한 경로 수정 적용
+
+#### Inno Setup 스크립트 수정
+- `ClipboardPilot-Simple.iss` 파일 경로 수정
+  - publish 폴더 경로로 변경
+  - `AppPublisher URL` → `AppPublisherURL` (공백 제거)
+- `ClipboardPilot-Full.iss` 파일 경로 수정
+  - publish 폴더 경로로 변경
+  - `SetupIconFile` 주석 처리 (아이콘 파일 없을 때)
+  - 선택적 파일에 `skipifsourcedoesntexist` 플래그 추가
+- `ClipboardPilot-Minimal.iss` 파일 경로 수정
+  - publish 폴더 경로로 변경
+
+### 🔧 Changed (변경)
+
+#### 라이선스 변경
+- MIT License → CC BY-NC-SA 4.0 (Creative Commons)
+  - 개인/교육/연구: 무료 사용
+  - 상업적 사용: 별도 라이선스 필요
+  - 라이선스 문의: b_h_woo@naver.com
+
+#### FAQ 업데이트
+- 라이선스 관련 FAQ 추가
+- 기업 사용 관련 안내 추가
+- 상업적 라이센스 문의 방법 추가
 
 ### 🛡️ Security (보안)
 
@@ -133,31 +178,89 @@
 
 ### 📚 Documentation (문서)
 
+#### 사용자 문서
 - 상세한 README.md
-- CONTRIBUTING.md (기여 가이드)
 - INSTALLATION.md (설치 가이드)
-- LICENSE.txt (MIT 라이선스)
-- 코드 내 XML 문서화 주석
+- FAQ 섹션 (README 포함)
 - 사용자 가이드 (README 포함)
+
+#### 개발자 문서
+- CONTRIBUTING.md (기여 가이드)
+- CHANGELOG.md (변경 로그)
+- 코드 내 XML 문서화 주석
+- GitHub Issue/PR 템플릿
+
+#### 빌드 가이드 (내부 문서)
+- NEW_BUILD_RELEASE_GUIDE.md - 빌드 파일 GitHub 릴리스 업로드 가이드
+- QUICK_BUILD_UPLOAD.md - 빠른 빌드 업로드 참조
+- INNO_SETUP_FIX_GUIDE.md - Inno Setup 오류 해결 가이드
+- BUILD_SCRIPTS_FIX_REPORT.md - 빌드 스크립트 수정 보고서
+- RELEASE_COMMIT_GUIDE.md - GitHub 릴리스 커밋 가이드
+- RELEASE_QUICK_REF.md - 릴리스 빠른 참조 카드
 
 ### 🔨 Build (빌드)
 
-- PowerShell 빌드 스크립트
-  - `Build-Simple.ps1` - 간단한 빌드
-  - `Build-Release.ps1` - 완전한 릴리스 빌드
-- Inno Setup 설치 스크립트
-  - `ClipboardPilot-Simple.iss`
-  - `ClipboardPilot-Full.iss`
-  - `ClipboardPilot-Minimal.iss`
-- Self-contained 단일 실행 파일 생성
-- ZIP 아카이브 생성
-- 체크섬 파일 생성 (SHA256)
+#### PowerShell 빌드 스크립트
+- `Build-Simple.ps1` - 간단한 빌드
+  - 단일 EXE 파일만 생성
+  - 가장 빠른 빌드
+  - 테스트용 권장
+- `Build-Release.ps1` - 완전한 릴리스 빌드
+  - Self-contained 단일 실행 파일
+  - ZIP 아카이브 생성
+  - Inno Setup 설치 파일 생성
+  - SHA256 체크섬 파일 생성
+  - 경로 자동 감지 및 확인
+  - 상세한 로그 출력
+
+#### Inno Setup 설치 스크립트
+- `ClipboardPilot-Simple.iss` (권장)
+  - 기본 설치
+  - 빠른 빌드
+  - 데스크톱 아이콘 옵션
+- `ClipboardPilot-Minimal.iss`
+  - 최소 설치
+  - 가장 빠른 빌드
+  - 옵션 없음
+- `ClipboardPilot-Full.iss`
+  - 완전한 설치
+  - 문서 포함 (README, LICENSE, CHANGELOG)
+  - 다국어 지원 (English, Korean)
+  - Quick Launch 아이콘
+
+#### 빌드 출력
+- Self-contained 단일 실행 파일 (~265 MB)
+- ZIP 아카이브 (Portable 버전)
+- 설치 프로그램 (Inno Setup)
+- SHA256 체크섬 파일
+
+### 📦 Distribution (배포)
+
+#### 릴리스 파일
+- `ClipboardPilot-Setup-v1.0.0.exe` - 설치 프로그램 (권장)
+- `ClipboardPilot-v1.0.0-win-x64.zip` - Portable 버전
+- `checksums.txt` - SHA256 체크섬
+
+#### GitHub Release
+- 태그: `v1.0.0`
+- 제목: "📋 Clipboard Pilot v1.0.0 - Initial Release"
+- 상세한 Release Notes 포함
+- 다운로드 파일 3개 제공
 
 ### 📝 Known Issues (알려진 문제)
 
+#### 빌드 관련
 - DevExpress 라이선스 필요 (소스 빌드 시)
+- Inno Setup 6 필요 (설치 파일 생성 시)
+  - 다운로드: https://jrsoftware.org/isdl.php
+
+#### 호환성
 - ARM64 프로세서 미지원 (x64만 지원)
+- Windows 10 (1903) 이상 필요
+
+#### 성능
 - 대량의 이미지 수집 시 메모리 사용량 증가 가능
+- 1000개 이상 항목 시 검색 속도 저하 가능
 
 ---
 
@@ -182,5 +285,5 @@ Patch: 이전 버전과 호환되는 버그 수정
 
 ---
 
-[Unreleased]: https://github.com/yourusername/ClipboardPilot/compare/v1.0.0...HEAD
-[1.0.0]: https://github.com/yourusername/ClipboardPilot/releases/tag/v1.0.0
+[Unreleased]: https://github.com/BaeTab/ClipboardPilot/compare/v1.0.0...HEAD
+[1.0.0]: https://github.com/BaeTab/ClipboardPilot/releases/tag/v1.0.0
