@@ -35,6 +35,7 @@ public partial class MainWindow : ThemedWindow
         
         Loaded += OnLoaded;
         Closed += OnClosed;
+        StateChanged += OnStateChanged;
     }
 
     private async void OnLoaded(object sender, RoutedEventArgs e)
@@ -49,12 +50,39 @@ public partial class MainWindow : ThemedWindow
             
             RegisterGlobalHotkeys();
             
-            _viewModel.StatusText = "Å¬¸³º¸µå ÆÄÀÏ·µÀÌ ½ÇÇàµÇ¾ú½À´Ï´Ù!";
+            // ì´ˆê¸° ìµœëŒ€í™”/ë³µì› ë²„íŠ¼ ìƒíƒœ ì„¤ì •
+            UpdateMaximizeRestoreButton();
+            
+            _viewModel.StatusText = "í´ë¦½ë³´ë“œ íŒŒì¼ëŸ¿ì´ ì‹œì‘ë˜ì—ˆìŠµë‹ˆë‹¤!";
         }
         catch (Exception ex)
         {
-            MessageBox.Show($"ÃÊ±âÈ­ ¿À·ù: {ex.Message}", "¿À·ù", 
+            MessageBox.Show($"ì´ˆê¸°í™” ì˜¤ë¥˜: {ex.Message}", "ì˜¤ë¥˜", 
                 MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+    }
+
+    private void OnStateChanged(object? sender, EventArgs e)
+    {
+        UpdateMaximizeRestoreButton();
+    }
+
+    private void UpdateMaximizeRestoreButton()
+    {
+        if (MaximizeRestoreButton != null)
+        {
+            if (WindowState == WindowState.Maximized)
+            {
+                // Restore icon (E923)
+                MaximizeRestoreButton.Content = "\uE923";
+                MaximizeRestoreButton.ToolTip = "ë³µì› (Restore)";
+            }
+            else
+            {
+                // Maximize icon (E922)
+                MaximizeRestoreButton.Content = "\uE922";
+                MaximizeRestoreButton.ToolTip = "ìµœëŒ€í™” (Maximize)";
+            }
         }
     }
 
@@ -68,14 +96,14 @@ public partial class MainWindow : ThemedWindow
         }
         catch (Exception ex)
         {
-            MessageBox.Show($"´ÜÃàÅ° µî·Ï ¿À·ù: {ex.Message}\n\nÀÏºÎ ´ÜÃàÅ°°¡ ÀÛµ¿ÇÏÁö ¾ÊÀ» ¼ö ÀÖ½À´Ï´Ù.", "°æ°í", 
+            MessageBox.Show($"ë‹¨ì¶•í‚¤ ë“±ë¡ ì‹¤íŒ¨: {ex.Message}\n\nì¼ë¶€ ë‹¨ì¶•í‚¤ê°€ ì‘ë™í•˜ì§€ ì•Šì„ ìˆ˜ ìˆìŠµë‹ˆë‹¤.", "ê²½ê³ ", 
                 MessageBoxButton.OK, MessageBoxImage.Warning);
         }
     }
 
     private void ShowMiniPanel()
     {
-        MessageBox.Show("¹Ì´Ï ÆĞ³Î ±â´ÉÀº °ğ Ãß°¡µË´Ï´Ù!", "Á¤º¸", 
+        MessageBox.Show("ë¯¸ë‹ˆ íŒ¨ë„ ê¸°ëŠ¥ì€ ê³§ ì¶”ê°€ë©ë‹ˆë‹¤!", "ì•Œë¦¼", 
             MessageBoxButton.OK, MessageBoxImage.Information);
     }
 
@@ -91,14 +119,20 @@ public partial class MainWindow : ThemedWindow
     {
         if (e.ClickCount == 2)
         {
-            if (WindowState == WindowState.Maximized)
-                WindowState = WindowState.Normal;
-            else
-                WindowState = WindowState.Maximized;
+            // ë”ë¸”í´ë¦­ìœ¼ë¡œ ìµœëŒ€í™”/ë³µì›
+            Maximize_Click(sender, e);
         }
         else
         {
-            DragMove();
+            // ë“œë˜ê·¸ë¡œ ì´ë™
+            try
+            {
+                DragMove();
+            }
+            catch
+            {
+                // DragMoveëŠ” ë§ˆìš°ìŠ¤ ë²„íŠ¼ì´ ëˆŒë¦° ìƒíƒœì—ì„œë§Œ ì‘ë™
+            }
         }
     }
 
@@ -110,9 +144,13 @@ public partial class MainWindow : ThemedWindow
     private void Maximize_Click(object sender, RoutedEventArgs e)
     {
         if (WindowState == WindowState.Maximized)
+        {
             WindowState = WindowState.Normal;
+        }
         else
+        {
             WindowState = WindowState.Maximized;
+        }
     }
 
     #endregion
@@ -120,8 +158,8 @@ public partial class MainWindow : ThemedWindow
     private void Exit_Click(object sender, RoutedEventArgs e)
     {
         var result = MessageBox.Show(
-            "Å¬¸³º¸µå ÆÄÀÏ·µÀ» Á¾·áÇÏ½Ã°Ú½À´Ï±î?", 
-            "Á¾·á È®ÀÎ", 
+            "í´ë¦½ë³´ë“œ íŒŒì¼ëŸ¿ì„ ì¢…ë£Œí•˜ì‹œê² ìŠµë‹ˆê¹Œ?", 
+            "ì¢…ë£Œ í™•ì¸", 
             MessageBoxButton.YesNo, 
             MessageBoxImage.Question);
             
@@ -187,19 +225,19 @@ public partial class MainWindow : ThemedWindow
 
         switch (content)
         {
-            case "ÀüÃ¼":
+            case "ì „ì²´":
                 _viewModel.FilterType = null;
                 break;
-            case "ÅØ½ºÆ®":
+            case "í…ìŠ¤íŠ¸":
                 _viewModel.FilterType = ClipboardType.Text;
                 break;
-            case "ÀÌ¹ÌÁö":
+            case "ì´ë¯¸ì§€":
                 _viewModel.FilterType = ClipboardType.Image;
                 break;
             case "HTML":
                 _viewModel.FilterType = ClipboardType.Html;
                 break;
-            case "ÆÄÀÏ ¸ñ·Ï":
+            case "íŒŒì¼ ëª©ë¡":
                 _viewModel.FilterType = ClipboardType.FileList;
                 break;
         }
@@ -217,7 +255,7 @@ public partial class MainWindow : ThemedWindow
         if (content == null)
             return;
 
-        if (content == "ÀüÃ¼")
+        if (content == "ì „ì²´")
         {
             _viewModel.FilterLabel = null;
         }
@@ -225,12 +263,12 @@ public partial class MainWindow : ThemedWindow
         {
             var labelMap = new Dictionary<string, ColorLabel>
             {
-                { "»¡°­", ColorLabel.Red },
-                { "ÁÖÈ²", ColorLabel.Orange },
-                { "³ë¶û", ColorLabel.Yellow },
-                { "ÃÊ·Ï", ColorLabel.Green },
-                { "ÆÄ¶û", ColorLabel.Blue },
-                { "º¸¶ó", ColorLabel.Purple }
+                { "ë¹¨ê°•", ColorLabel.Red },
+                { "ì£¼í™©", ColorLabel.Orange },
+                { "ë…¸ë‘", ColorLabel.Yellow },
+                { "ì´ˆë¡", ColorLabel.Green },
+                { "íŒŒë‘", ColorLabel.Blue },
+                { "ë³´ë¼", ColorLabel.Purple }
             };
 
             if (labelMap.TryGetValue(content, out var label))
@@ -260,54 +298,54 @@ public partial class MainWindow : ThemedWindow
 
     private void ShowHelp_Click(object sender, RoutedEventArgs e)
     {
-        var helpMessage = @"Å¬¸³º¸µå ÆÄÀÏ·µ »ç¿ë¹ı
+        var helpMessage = @"í´ë¦½ë³´ë“œ íŒŒì¼ëŸ¿ ì‚¬ìš©ë²•
 
-ÁÖ¿ä ±â´É:
-? ÀÚµ¿À¸·Î Å¬¸³º¸µå ³»¿ëÀ» ÀúÀåÇÕ´Ï´Ù
-? ÅØ½ºÆ®, ÀÌ¹ÌÁö, HTML, ÆÄÀÏ ¸ñ·ÏÀ» Áö¿øÇÕ´Ï´Ù
-? °Ë»ö ¹× ÇÊÅÍ¸µÀ¸·Î ºü¸£°Ô Ã£À» ¼ö ÀÖ½À´Ï´Ù
-? Áß¿äÇÑ Ç×¸ñÀ» °íÁ¤ÇÒ ¼ö ÀÖ½À´Ï´Ù
+ì£¼ìš” ê¸°ëŠ¥:
+? ìë™ìœ¼ë¡œ í´ë¦½ë³´ë“œ ë‚´ìš©ì„ ì €ì¥í•©ë‹ˆë‹¤
+? í…ìŠ¤íŠ¸, ì´ë¯¸ì§€, HTML, íŒŒì¼ ëª©ë¡ì„ ì§€ì›í•©ë‹ˆë‹¤
+? ê²€ìƒ‰ ë° í•„í„°ë§ìœ¼ë¡œ ë¹ ë¥´ê²Œ ì°¾ì„ ìˆ˜ ìˆìŠµë‹ˆë‹¤
+? ì¤‘ìš”í•œ í•­ëª©ì„ ê³ ì •í•  ìˆ˜ ìˆìŠµë‹ˆë‹¤
 
-°Ë»ö:
-? »ó´Ü °Ë»öÃ¢¿¡ Å°¿öµå¸¦ ÀÔ·ÂÇÏ¼¼¿ä
-? Enter Å°·Î °Ë»öÀ» ½ÇÇàÇÕ´Ï´Ù
-? Esc Å°·Î °Ë»öÀ» ÃÊ±âÈ­ÇÕ´Ï´Ù
+ê²€ìƒ‰:
+? ìƒë‹¨ ê²€ìƒ‰ì°½ì— í‚¤ì›Œë“œë¥¼ ì…ë ¥í•˜ì„¸ìš”
+? Enter í‚¤ë¡œ ê²€ìƒ‰ì„ ì‹¤í–‰í•©ë‹ˆë‹¤
+? Esc í‚¤ë¡œ ê²€ìƒ‰ì„ ì´ˆê¸°í™”í•©ë‹ˆë‹¤
 
-ÇÊÅÍ:
-? ÁÂÃø ÆĞ³Î¿¡¼­ À¯Çüº°, ³¯Â¥º°·Î ÇÊÅÍ¸µÇÏ¼¼¿ä
-? ºü¸¥ ÇÊÅÍ ¹öÆ°À¸·Î ÀÚÁÖ »ç¿ëÇÏ´Â ÇÊÅÍ¸¦ Àû¿ëÇÏ¼¼¿ä
+í•„í„°:
+? ì¢Œì¸¡ íŒ¨ë„ì—ì„œ ìœ í˜•ë³„, ë‚ ì§œë³„ë¡œ í•„í„°ë§í•˜ì„¸ìš”
+? ë¹ ë¥¸ í•„í„° ë²„íŠ¼ìœ¼ë¡œ ìì£¼ ì‚¬ìš©í•˜ëŠ” í•„í„°ë¥¼ ì ìš©í•˜ì„¸ìš”
 
-°íÁ¤:
-? Ç×¸ñÀ» ¼±ÅÃÇÏ°í ¿ìÅ¬¸¯ > °íÁ¤/ÇØÁ¦
-? °íÁ¤µÈ Ç×¸ñÀº Ç×»ó »ó´Ü¿¡ Ç¥½ÃµË´Ï´Ù
+ê³ ì •:
+? í•­ëª©ì„ ì„ íƒí•˜ê³  ìš°í´ë¦­ > ê³ ì •/í•´ì œ
+? ê³ ì •ëœ í•­ëª©ì€ í•­ìƒ ìƒë‹¨ì— í‘œì‹œë©ë‹ˆë‹¤
 
-´ÜÃàÅ°´Â 'µµ¿ò¸» > ´ÜÃàÅ°'¿¡¼­ È®ÀÎÇÏ¼¼¿ä!";
+ë‹¨ì¶•í‚¤ëŠ” 'ë„ì›€ë§ > ë‹¨ì¶•í‚¤'ì—ì„œ í™•ì¸í•˜ì„¸ìš”!";
 
-        MessageBox.Show(helpMessage, "»ç¿ë¹ı", MessageBoxButton.OK, MessageBoxImage.Information);
+        MessageBox.Show(helpMessage, "ì‚¬ìš©ë²•", MessageBoxButton.OK, MessageBoxImage.Information);
     }
 
     private void ShowShortcuts_Click(object sender, RoutedEventArgs e)
     {
-        var shortcutsMessage = @"Å¬¸³º¸µå ÆÄÀÏ·µ ´ÜÃàÅ°
+        var shortcutsMessage = @"í´ë¦½ë³´ë“œ íŒŒì¼ëŸ¿ ë‹¨ì¶•í‚¤
 
-Àü¿ª ´ÜÃàÅ°:
-? Ctrl+Shift+V : ¹Ì´Ï ÆĞ³Î ¿­±â
-? Ctrl+Alt+V : ÀÌÀü Ç×¸ñ ºÙ¿©³Ö±â
-? Ctrl+Alt+1~9 : Áñ°ÜÃ£±â Ç×¸ñ ºÙ¿©³Ö±â
+ì „ì—­ ë‹¨ì¶•í‚¤:
+? Ctrl+Shift+V : ë¯¸ë‹ˆ íŒ¨ë„ ì—´ê¸°
+? Ctrl+Alt+V : ì´ì „ í•­ëª© ë¶™ì—¬ë„£ê¸°
+? Ctrl+Alt+1~9 : ì¦ê²¨ì°¾ê¸° í•­ëª© ë¶™ì—¬ë„£ê¸°
 
-ÇÁ·Î±×·¥ ³» ´ÜÃàÅ°:
-? Ctrl+F : °Ë»ö Æ÷Ä¿½º
-? Ctrl+D : ¼±ÅÃ Ç×¸ñ »èÁ¦
-? Ctrl+P : ¼±ÅÃ Ç×¸ñ °íÁ¤/ÇØÁ¦
-? F5 : »õ·Î°íÄ§
-? Esc : ÇÊÅÍ ÃÊ±âÈ­
+í”„ë¡œê·¸ë¨ ë‚´ ë‹¨ì¶•í‚¤:
+? Ctrl+F : ê²€ìƒ‰ í¬ì»¤ìŠ¤
+? Ctrl+D : ì„ íƒ í•­ëª© ì‚­ì œ
+? Ctrl+P : ì„ íƒ í•­ëª© ê³ ì •/í•´ì œ
+? F5 : ìƒˆë¡œê³ ì¹¨
+? Esc : í•„í„° ì´ˆê¸°í™”
 
-¸¶¿ì½º:
-? ´õºíÅ¬¸¯ : Ç×¸ñ º¹»ç
-? ¿ìÅ¬¸¯ : ÄÁÅØ½ºÆ® ¸Ş´º
+ë§ˆìš°ìŠ¤:
+? ë”ë¸”í´ë¦­ : í•­ëª© ë³µì‚¬
+? ìš°í´ë¦­ : ì»¨í…ìŠ¤íŠ¸ ë©”ë‰´
 
-ÆÁ: ¼³Á¤¿¡¼­ ´ÜÃàÅ°¸¦ º¯°æÇÒ ¼ö ÀÖ½À´Ï´Ù!";
+íŒ: ì„¤ì •ì—ì„œ ë‹¨ì¶•í‚¤ë¥¼ ë³€ê²½í•  ìˆ˜ ìˆìŠµë‹ˆë‹¤!";
 
-        MessageBox.Show(shortcutsMessage, "´ÜÃàÅ°", MessageBoxButton.OK, MessageBoxImage.Information);
+        MessageBox.Show(shortcutsMessage, "ë‹¨ì¶•í‚¤", MessageBoxButton.OK, MessageBoxImage.Information);
     }
 }
