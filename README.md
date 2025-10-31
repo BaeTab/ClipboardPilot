@@ -765,7 +765,7 @@ Copyright (c) 2024 Clipboard Pilot
 <details>
 <summary><b>Q: 무료인가요?</b></summary>
 
-A: 네, 완전 무료이며 오픈소스입니다! MIT 라이선스 하에 자유롭게 사용할 수 있습니다.
+A: 네, 완전 무료이며 오픈소스입니다! 라이선스 하에 자유롭게 사용할 수 있습니다.
 </details>
 
 <details>
