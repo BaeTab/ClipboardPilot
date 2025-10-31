@@ -8,7 +8,9 @@
     Height="750" Width="1200"
     WindowStartupLocation="CenterScreen"
     Background="White"
-    WindowStyle="SingleBorderWindow">
+    WindowStyle="None"
+    ResizeMode="CanResize"
+    AllowsTransparency="False">
     
     <Window.Resources>
         <Style x:Key="ModernButton" TargetType="Button">
