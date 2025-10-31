@@ -343,9 +343,11 @@ logs/
 # Ignore temporary/marketing docs
 GITHUB_DEPLOYMENT.md
 GITHUB_DESCRIPTION_GUIDE.md
+GITHUB_RELEASE_GUIDE.md
 MARKETING_GUIDE.md
 SOCIAL_MEDIA_TEMPLATES.md
 PROJECT_CLEANUP_REPORT.md
+release-notes-*.md
 *_TEMP.md
 *_DRAFT.md
 *_TODO.md
