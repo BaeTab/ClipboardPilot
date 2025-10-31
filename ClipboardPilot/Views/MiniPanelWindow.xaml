@@ -1,0 +1,292 @@
+﻿<dx:ThemedWindow 
+    x:Class="ClipboardPilot.Views.MiniPanelWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
+    Title="���� Ŭ������ �г�" 
+    Height="550" Width="450"
+    WindowStyle="None"
+    WindowStartupLocation="CenterScreen"
+    ShowInTaskbar="False"
+    Topmost="True"
+    ResizeMode="CanResize"
+    Background="Transparent"
+    AllowsTransparency="True">
+    
+    <Border Background="White" 
+            BorderBrush="#007ACC" 
+            BorderThickness="2"
+            CornerRadius="10"
+            Margin="5">
+        <Border.Effect>
+            <DropShadowEffect Color="#000000" 
+                            Direction="270" 
+                            ShadowDepth="3" 
+                            BlurRadius="15" 
+                            Opacity="0.3"/>
+        </Border.Effect>
+        
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            
+            <Border Grid.Row="0" 
+                    Background="#007ACC" 
+                    CornerRadius="8,8,0,0"
+                    MouseLeftButtonDown="TitleBar_MouseLeftButtonDown">
+                <Grid Height="45">
+                    <TextBlock Text="���� Ŭ������" 
+                               Foreground="White" 
+                               FontSize="16"
+                               FontWeight="SemiBold"
+                               VerticalAlignment="Center"
+                               Margin="15,0,0,0"/>
+                    <Button Content="X" 
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Center"
+                            Width="40"
+                            Height="35"
+                            Background="Transparent"
+                            Foreground="White"
+                            BorderThickness="0"
+                            FontSize="16"
+                            FontWeight="Bold"
+                            Cursor="Hand"
+                            Click="Close_Click">
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Setter Property="Background" Value="Transparent"/>
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="Button">
+                                            <Border Background="{TemplateBinding Background}">
+                                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                            </Border>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="#C42B1C"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
+                </Grid>
+            </Border>
+            
+            <Border Grid.Row="1" Background="#F6F8FA" Padding="15,12">
+                <Border BorderBrush="#D1D5DA" 
+                        BorderThickness="1" 
+                        CornerRadius="4" 
+                        Background="White">
+                    <TextBox Text="{Binding QuickSearchText, UpdateSourceTrigger=PropertyChanged}"
+                             VerticalContentAlignment="Center"
+                             BorderThickness="0"
+                             Padding="12,10"
+                             FontSize="14"
+                             Foreground="#24292E">
+                        <TextBox.InputBindings>
+                            <KeyBinding Key="Enter" Command="{Binding SearchCommand}"/>
+                            <KeyBinding Key="Down" Command="{Binding MoveSelectionDownCommand}"/>
+                            <KeyBinding Key="Up" Command="{Binding MoveSelectionUpCommand}"/>
+                            <KeyBinding Key="Escape" Command="{Binding CloseCommand}"/>
+                        </TextBox.InputBindings>
+                    </TextBox>
+                </Border>
+            </Border>
+            
+            <ListBox Grid.Row="2" 
+                     ItemsSource="{Binding RecentItems}"
+                     SelectedItem="{Binding SelectedItem}"
+                     SelectedIndex="{Binding SelectedIndex}"
+                     HorizontalContentAlignment="Stretch"
+                     ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                     BorderThickness="0"
+                     Background="White"
+                     Padding="5">
+                <ListBox.InputBindings>
+                    <KeyBinding Key="Enter" Command="{Binding PasteSelectedCommand}"/>
+                    <KeyBinding Key="D1" Modifiers="Control" Command="{Binding PasteFavoriteCommand}" CommandParameter="1"/>
+                    <KeyBinding Key="D2" Modifiers="Control" Command="{Binding PasteFavoriteCommand}" CommandParameter="2"/>
+                    <KeyBinding Key="D3" Modifiers="Control" Command="{Binding PasteFavoriteCommand}" CommandParameter="3"/>
+                    <KeyBinding Key="D4" Modifiers="Control" Command="{Binding PasteFavoriteCommand}" CommandParameter="4"/>
+                    <KeyBinding Key="D5" Modifiers="Control" Command="{Binding PasteFavoriteCommand}" CommandParameter="5"/>
+                    <KeyBinding Key="D6" Modifiers="Control" Command="{Binding PasteFavoriteCommand}" CommandParameter="6"/>
+                    <KeyBinding Key="D7" Modifiers="Control" Command="{Binding PasteFavoriteCommand}" CommandParameter="7"/>
+                    <KeyBinding Key="D8" Modifiers="Control" Command="{Binding PasteFavoriteCommand}" CommandParameter="8"/>
+                    <KeyBinding Key="D9" Modifiers="Control" Command="{Binding PasteFavoriteCommand}" CommandParameter="9"/>
+                </ListBox.InputBindings>
+                
+                <ListBox.ItemContainerStyle>
+                    <Style TargetType="ListBoxItem">
+                        <Setter Property="Padding" Value="0"/>
+                        <Setter Property="Margin" Value="0"/>
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="ListBoxItem">
+                                    <Border Background="{TemplateBinding Background}" 
+                                            BorderBrush="{TemplateBinding BorderBrush}"
+                                            BorderThickness="{TemplateBinding BorderThickness}"
+                                            Padding="{TemplateBinding Padding}"
+                                            CornerRadius="4"
+                                            Margin="5,2">
+                                        <ContentPresenter/>
+                                    </Border>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#F0F4F8"/>
+                            </Trigger>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter Property="Background" Value="#E3F2FD"/>
+                                <Setter Property="BorderBrush" Value="#007ACC"/>
+                                <Setter Property="BorderThickness" Value="2"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </ListBox.ItemContainerStyle>
+                
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Border Padding="12,10">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                
+                                <StackPanel Grid.Row="0" Grid.Column="0">
+                                    <TextBlock Text="{Binding Type}"
+                                               FontWeight="SemiBold" 
+                                               Foreground="#007ACC"
+                                               FontSize="11"
+                                               Margin="0,0,0,4"/>
+                                    
+                                    <TextBlock Text="{Binding Preview}" 
+                                               TextWrapping="Wrap"
+                                               TextTrimming="CharacterEllipsis"
+                                               MaxHeight="50"
+                                               FontSize="13"
+                                               Foreground="#24292E"/>
+                                </StackPanel>
+                                
+                                <StackPanel Grid.Row="0" Grid.Column="1" 
+                                            Orientation="Horizontal" 
+                                            VerticalAlignment="Top"
+                                            Margin="10,0,0,0">
+                                    <Border Background="#FFD700" 
+                                            CornerRadius="10" 
+                                            Padding="6,2"
+                                            Margin="2,0">
+                                        <Border.Style>
+                                            <Style TargetType="Border">
+                                                <Setter Property="Visibility" Value="Collapsed"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding Pinned}" Value="True">
+                                                        <Setter Property="Visibility" Value="Visible"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Border.Style>
+                                        <TextBlock Text="[P]" 
+                                                   FontSize="11"
+                                                   FontWeight="Bold"
+                                                   VerticalAlignment="Center"/>
+                                    </Border>
+                                    
+                                    <Border Background="#FF6B35" 
+                                            CornerRadius="10" 
+                                            Padding="6,2"
+                                            Margin="2,0">
+                                        <Border.Style>
+                                            <Style TargetType="Border">
+                                                <Setter Property="Visibility" Value="Collapsed"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding FavoriteRank}" Value="0">
+                                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Border.Style>
+                                        <TextBlock Foreground="White" 
+                                                   FontSize="11"
+                                                   FontWeight="Bold">
+                                            <Run Text="["/>
+                                            <Run Text="{Binding FavoriteRank}"/>
+                                            <Run Text="]"/>
+                                        </TextBlock>
+                                    </Border>
+                                </StackPanel>
+                                
+                                <TextBlock Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
+                                           Text="{Binding CreatedAt, StringFormat='{}{0:yyyy-MM-dd HH:mm}'}"
+                                           FontSize="11"
+                                           Foreground="#959DA5"
+                                           Margin="0,4,0,0"/>
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+            
+            <Border Grid.Row="3" 
+                    Background="#F6F8FA" 
+                    BorderBrush="#E1E4E8"
+                    BorderThickness="0,1,0,0"
+                    Padding="15,12"
+                    CornerRadius="0,0,8,8">
+                <StackPanel>
+                    <Button Content="���� �׸� �ٿ��ֱ� (Enter)" 
+                            Command="{Binding PasteSelectedCommand}"
+                            Background="#28A745"
+                            Foreground="White"
+                            BorderThickness="0"
+                            Padding="12,10"
+                            FontSize="14"
+                            FontWeight="SemiBold"
+                            Cursor="Hand"
+                            Margin="0,0,0,10">
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="Button">
+                                            <Border Background="{TemplateBinding Background}" 
+                                                    CornerRadius="4"
+                                                    Padding="{TemplateBinding Padding}">
+                                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                            </Border>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="#218838"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
+                    
+                    <TextBlock Text="����Ű�� �̵� | Ctrl+1-9�� ���ã�� | Esc�� �ݱ�"
+                               FontSize="11" 
+                               Foreground="#586069" 
+                               TextAlignment="Center"
+                               TextWrapping="Wrap"/>
+                </StackPanel>
+            </Border>
+        </Grid>
+    </Border>
+</dx:ThemedWindow>

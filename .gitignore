@@ -1,0 +1,535 @@
+# Visual Studio 2022
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Build results
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+bld/
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Ll]ogs/
+
+# Build Output (Setup files and installers)
+Output/
+*.exe
+*.msi
+*.zip
+
+# Visual Studio cache/options
+.vs/
+.vscode/
+*.cache
+*.ilk
+*.meta
+*.obj
+*.iobj
+*.pch
+*.pdb
+*.ipdb
+*.pgc
+*.pgd
+*.rsp
+*.sbr
+*.tlb
+*.tli
+*.tlh
+*.tmp
+*.tmp_proj
+*_wpftmp.csproj
+*.log
+*.vspscc
+*.vssscc
+.builds
+*.pidb
+*.svclog
+*.scc
+
+# Chutzpah Test files
+_Chutzpah*
+
+# Visual C++ cache files
+ipch/
+*.aps
+*.ncb
+*.opendb
+*.opensdf
+*.sdf
+*.cachefile
+*.VC.db
+*.VC.VC.opendb
+
+# Visual Studio profiler
+*.psess
+*.vsp
+*.vspx
+*.sap
+
+# Visual Studio Trace Files
+*.e2e
+
+# TFS 2012 Local Workspace
+$tf/
+
+# ReSharper
+_ReSharper*/
+*.[Rr]e[Ss]harper
+*.DotSettings.user
+
+# JustCode
+.JustCode
+
+# TeamCity
+_TeamCity*
+
+# DotCover
+*.dotCover
+
+# AxoCover
+.axoCover/*
+!.axoCover/settings.json
+
+# Coverlet
+coverage*.json
+coverage*.xml
+coverage*.info
+
+# Visual Studio code coverage results
+*.coverage
+*.coveragexml
+
+# NCrunch
+_NCrunch_*
+.*crunch*.local.xml
+nCrunchTemp_*
+
+# MightyMoose
+*.mm.*
+AutoTest.Net/
+
+# Web workbench (sass)
+.sass-cache/
+
+# Installshield output folder
+[Ee]xpress/
+
+# DocProject
+DocProject/buildhelp/
+DocProject/Help/*.HxT
+DocProject/Help/*.HxC
+DocProject/Help/*.hhc
+DocProject/Help/*.hhk
+DocProject/Help/*.hhp
+DocProject/Help/Html2
+DocProject/Help/html
+
+# Click-Once directory
+publish/
+
+# Publish Web Output
+*.[Pp]ublish.xml
+*.azurePubxml
+*.pubxml
+*.publishproj
+
+# Microsoft Azure Web App publish settings
+PublishScripts/
+
+# NuGet Packages
+*.nupkg
+*.snupkg
+**/[Pp]ackages/*
+!**/[Pp]ackages/build/
+*.nuget.props
+*.nuget.targets
+
+# NuGet Symbol Packages
+*.snupkg
+
+# NuGet v3's project.json files
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+# NuGet cache
+**/packages/*
+!**/packages/repositories.config
+
+# Microsoft Azure Build Output
+csx/
+*.build.csdef
+
+# Microsoft Azure Emulator
+ecf/
+rcf/
+
+# Windows Store app package directories and files
+AppPackages/
+BundleArtifacts/
+Package.StoreAssociation.xml
+_pkginfo.txt
+*.appx
+*.appxbundle
+*.appxupload
+
+# Visual Studio cache files
+*.suo
+*.user
+*.sln.docstates
+
+# Backup & report files from converting an old project
+_UpgradeReport_Files/
+Backup*/
+UpgradeLog*.XML
+UpgradeLog*.htm
+ServiceFabricBackup/
+*.rptproj.bak
+
+# SQL Server files
+*.mdf
+*.ldf
+*.ndf
+
+# Business Intelligence projects
+*.rdl.data
+*.bim.layout
+*.bim_*.settings
+*.rptproj.rsuser
+*- [Bb]ackup.rdl
+*- [Bb]ackup ([0-9]).rdl
+*- [Bb]ackup ([0-9][0-9]).rdl
+
+# Microsoft Fakes
+FakesAssemblies/
+
+# GhostDoc plugin
+*.GhostDoc.xml
+
+# Node.js Tools for Visual Studio
+.ntvs_analysis.dat
+node_modules/
+
+# Visual Studio 6 build log
+*.plg
+
+# Visual Studio 6 workspace options file
+*.opt
+
+# Visual Studio 6 auto-generated workspace file (contains which files were open etc.)
+*.vbw
+
+# Visual Studio LightSwitch build output
+**/*.HTMLClient/GeneratedArtifacts
+**/*.DesktopClient/GeneratedArtifacts
+**/*.DesktopClient/ModelManifest.xml
+**/*.Server/GeneratedArtifacts
+**/*.Server/ModelManifest.xml
+_Pvt_Extensions
+
+# Paket dependency manager
+.paket/paket.exe
+paket-files/
+
+# FAKE - F# Make
+.fake/
+
+# CodeRush personal settings
+.cr/personal
+
+# Python Tools for Visual Studio (PTVS)
+__pycache__/
+*.pyc
+
+# Cake
+tools/**
+!tools/packages.config
+
+# Tabs Studio
+*.tss
+
+# Telerik's JustMock configuration file
+*.jmconfig
+
+# BizTalk build output
+*.btp.cs
+*.btm.cs
+*.odx.cs
+*.xsd.cs
+
+# OpenCover UI analysis results
+OpenCover/
+
+# Azure Stream Analytics local run output
+ASALocalRun/
+
+# MSBuild Binary and Structured Log
+*.binlog
+
+# NVidia Nsight GPU debugger configuration file
+*.nvuser
+
+# MFractors (Xamarin productivity tools) working folder
+.mfractor/
+
+# Local History for Visual Studio
+.localhistory/
+
+# BeatPulse healthcheck temp database
+healthchecksdb
+
+# Backup folder for Package Reference Convert tool in Visual Studio 2017
+MigrationBackup/
+
+# Ionide (cross platform F# VS Code tools) working folder
+.ionide/
+
+# Fody - auto-generated XML schema
+FodyWeavers.xsd
+
+##
+## Visual Studio Code
+##
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.code-workspace
+
+# Local History for Visual Studio Code
+.history/
+
+##
+## Custom Project Specific
+##
+
+# SQLite Database Files
+*.db
+*.db-shm
+*.db-wal
+*.sqlite
+*.sqlite3
+
+# Application Data (User Settings & Runtime)
+clipboard-pilot.settings.json
+clipboard-pilot-*.log
+
+# Image Cache
+Images/
+ImageCache/
+**/Images/*.png
+**/Images/*.jpg
+**/Images/*.jpeg
+**/Images/*.gif
+**/Images/*.bmp
+
+# Logs
+Logs/
+*.log
+logs/
+
+# Temporary Documentation Files (Development/Marketing)
+# Keep: README.md, LICENSE.txt, CONTRIBUTING.md, CHANGELOG.md, INSTALLATION.md
+# Ignore temporary/marketing docs
+GITHUB_DEPLOYMENT.md
+GITHUB_DESCRIPTION_GUIDE.md
+MARKETING_GUIDE.md
+SOCIAL_MEDIA_TEMPLATES.md
+PROJECT_CLEANUP_REPORT.md
+*_TEMP.md
+*_DRAFT.md
+*_TODO.md
+*_NOTES.md
+
+# Temporary Scripts
+AutoFix.ps1
+Test-*.ps1
+*_temp.ps1
+*_test.ps1
+
+# Agent/AI Development Notes
+agent.md
+*.agent.md
+AI_NOTES.md
+
+# Technical Documentation (Internal/Development)
+# Keep only essential docs in repo
+SELF_COPY_FIX.md
+BUILD_INSTRUCTIONS.md
+TECHNICAL_*.md
+
+# Inno Setup Temporary Files
+Setup/Output/
+Setup/*.iss.bak
+Setup/Temp/
+
+# WiX (not used)
+*.wxs
+*.wixobj
+*.wixpdb
+
+# Temporary files
+*.tmp
+*.temp
+~$*
+*.swp
+*.swo
+*~
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+ehthumbs_vista.db
+Thumbs.db
+Thumbs.db:encryptable
+Desktop.ini
+$RECYCLE.BIN/
+
+# Windows shortcuts
+*.lnk
+
+# DevExpress License Files (if any)
+*.lic
+DevExpress.Data/
+
+# JetBrains Rider
+.idea/
+*.sln.iml
+
+# User-specific files
+*.rsuser
+
+# Mono auto generated files
+mono_crash.*
+
+# Windows image file caches
+Thumbs.db
+
+# Folder config file
+Desktop.ini
+
+# Recycle Bin used on file shares
+$RECYCLE.BIN/
+
+# Mac desktop service store files
+.DS_Store
+
+# Build Outputs
+PublishProfiles/
+*.pubxml
+*.azurePubxml
+
+# Windows Installer files (duplicates in Output/)
+*.cab
+
+# Custom exclusions for ClipboardPilot
+**/AppData/
+**/LocalAppData/
+**/.clipboardpilot/
+
+# Exclude user data directory (if configured)
+UserData/
+ClipboardData/
+
+# Exclude backup files
+*.bak
+*.backup
+*backup/
+
+# Exclude compressed archives (usually build artifacts)
+# *.zip (already covered in Build Output)
+*.7z
+*.rar
+*.tar
+*.gz
+
+# Exclude documentation build output
+docs/_build/
+site/
+
+# Exclude test results
+TestResults/
+*.trx
+*.coverage
+*.coveragexml
+
+# JetBrains IDEs
+.idea/
+*.iml
+
+# Temporary XAML designer files
+*.g.cs
+*.g.i.cs
+
+# Application config with sensitive data (if any)
+appsettings.Production.json
+secrets.json
+
+# Certificate files
+*.pfx
+*.p12
+*.cer
+*.crt
+*.key
+
+# Auto-generated documentation
+_site/
+api/
+
+# Benchmark results
+BenchmarkDotNet.Artifacts/
+
+# StyleCop Cache
+StyleCopReport.xml
+
+# NCover
+*.coverage
+*.coveragexml
+
+# dotCover
+*.dotCover
+
+# SpecFlow
+*.feature.cs
+*.feature.xlsx.*
+
+# Azure Functions local settings
+local.settings.json
+
+# Terraform files (if using Azure deployment)
+*.tfstate
+*.tfstate.backup
+.terraform/
+
+# Rider
+.idea/
+.idea_modules/
+
+# Application runtime data
+%APPDATA%/ClipboardPilot/
+
+# Exclude all generated/temp files
+**/generated/
+**/temp/
+**/tmp/
+
+# Screenshots and demo materials (development)
+screenshots/
+demo/
+*.gif
+
+# End of .gitignore

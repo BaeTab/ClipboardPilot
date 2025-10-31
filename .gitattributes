@@ -1,0 +1,121 @@
+# Auto detect text files and perform LF normalization
+* text=auto
+
+# C# files
+*.cs text diff=csharp
+*.csx text diff=csharp
+*.cshtml text diff=html
+
+# XAML files
+*.xaml text
+*.xaml.cs text diff=csharp
+
+# XML files
+*.xml text
+*.config text
+*.props text
+*.targets text
+*.nuspec text
+*.resx text
+
+# JSON files
+*.json text
+
+# Markdown files
+*.md text
+
+# PowerShell files
+*.ps1 text
+*.psm1 text
+*.psd1 text
+
+# Batch files
+*.bat text eol=crlf
+*.cmd text eol=crlf
+
+# Shell scripts
+*.sh text eol=lf
+
+# Documentation
+*.txt text
+README text
+LICENSE text
+AUTHORS text
+CHANGELOG text
+
+# Graphics
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.bmp binary
+*.svg text
+
+# Fonts
+*.ttf binary
+*.otf binary
+*.woff binary
+*.woff2 binary
+*.eot binary
+
+# Archives
+*.zip binary
+*.7z binary
+*.gz binary
+*.tar binary
+*.rar binary
+
+# Executables
+*.exe binary
+*.dll binary
+
+# Database
+*.db binary
+*.sqlite binary
+*.sqlite3 binary
+
+# Visual Studio
+*.sln text eol=crlf
+*.csproj text
+*.vbproj text
+*.vcxproj text
+*.vcxproj.filters text
+*.proj text
+*.projitems text
+*.shproj text
+*.props text
+*.targets text
+
+# Git
+.gitattributes text
+.gitignore text
+.gitmodules text
+
+# EditorConfig
+.editorconfig text
+
+# Certificate files
+*.pfx binary
+*.p12 binary
+*.cer binary
+*.crt text
+*.key text
+
+# Compiled files
+*.o binary
+*.pyc binary
+*.pyo binary
+*.class binary
+
+# Package files
+*.nupkg binary
+*.snupkg binary
+
+# Windows specific
+*.lnk binary
+
+# Diff settings
+*.cs diff=csharp
+*.xaml diff=xaml
+*.json diff=json
